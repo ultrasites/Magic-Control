@@ -4,11 +4,12 @@ import Button from "./Button";
 import {
   LightStatus,
   ShutterStatus,
-  StatusTypes,
+  StatusTypes
 } from "./widget/info/shelly/Shelly.types";
 import {
-  shellyActionREST,
+  shellyRestCallAction,
   isDimmedLight,
+  isShutter
 } from "./widget/info/shelly/Shelly.utils";
 import { Device, WidgetConfig, WidgetType } from "./Widget.types";
 
@@ -30,15 +31,59 @@ export default function WidgetQuickControls(props: IWidgetQuickControls) {
           <>
             <Button
               disabled={(state as ShutterStatus).state === "open"}
-              onClick={async () => {}}
+              onClick={async () => {
+                if (isShelly(config) && isShutter(config)) {
+                  await shellyRestCallAction(
+                    config.rest.ip,
+                    config.rest.endpoints.set,
+                    {
+                      go:
+                        (state as ShutterStatus).state === "opening"
+                          ? "stop"
+                          : "open"
+                    }
+                  );
+                  return Promise.resolve();
+                }
+
+                return Promise.reject("Device type not supported.");
+              }}
             >
-              <i class="fa-chevron-up fa-solid" />
+              <i
+                class={`${
+                  (state as ShutterStatus).state === "opening"
+                    ? "fa-pause"
+                    : "fa-chevron-up"
+                } fa-solid`}
+              />
             </Button>
             <Button
               disabled={(state as ShutterStatus).state === "closed"}
-              onClick={async () => {}}
+              onClick={async () => {
+                if (isShelly(config) && isShutter(config)) {
+                  await shellyRestCallAction(
+                    config.rest.ip,
+                    config.rest.endpoints.set,
+                    {
+                      go:
+                        (state as ShutterStatus).state === "closing"
+                          ? "stop"
+                          : "close"
+                    }
+                  );
+                  return Promise.resolve();
+                }
+
+                return Promise.reject("Device type not supported.");
+              }}
             >
-              <i class="fa-chevron-down fa-solid" />
+              <i
+                class={`${
+                  (state as ShutterStatus).state === "closing"
+                    ? "fa-pause"
+                    : "fa-chevron-down"
+                } fa-solid`}
+              />
             </Button>
           </>
         );
@@ -48,11 +93,11 @@ export default function WidgetQuickControls(props: IWidgetQuickControls) {
             active={state && (state as LightStatus)!.ison}
             onClick={async (_isActive) => {
               if (isShelly(config) && isDimmedLight(config)) {
-                await shellyActionREST(
+                await shellyRestCallAction(
                   config.rest.ip,
                   config.rest.endpoints.set,
                   {
-                    turn: _isActive ? "on" : "off",
+                    turn: _isActive ? "on" : "off"
                   }
                 );
 

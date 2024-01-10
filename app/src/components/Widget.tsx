@@ -19,7 +19,10 @@ import WidgetDetails from "./widget/details/WidgetDetails";
 import WidgetHeader from "./widget/WidgetHeader";
 import { info$, status$ } from "./widget/info/shelly/Shelly.observables";
 import { ShellyInfo, StatusTypes } from "./widget/info/shelly/Shelly.types";
-import { isLightStatus } from "./widget/info/shelly/Shelly.utils";
+import {
+  isLightStatus,
+  isShutterStatus,
+} from "./widget/info/shelly/Shelly.utils";
 import { Device, WidgetConfig, WidgetType } from "./Widget.types";
 import WidgetQuickControls from "./WidgetQuickControls";
 
@@ -82,8 +85,20 @@ export default function Widget(props: IWidget) {
               setState({
                 state: status.ison ? "on" : "off",
                 ...(status.ison && {
-                  value: `${status.brightness.toString()}%`,
+                  value: status.brightness.toString(),
                 }),
+              });
+            }
+
+            if (isShutterStatus(status)) {
+              setState({
+                state:
+                  status.state === "closing"
+                    ? "slidingDown"
+                    : status.state === "opening"
+                    ? "slidingUp"
+                    : status.state,
+                value: status.current_pos.toString(),
               });
             }
             return setShellyState(status);
@@ -172,7 +187,7 @@ export default function Widget(props: IWidget) {
             {!isInfo && <State state={state().state} value={state().value} />}
           </div>
         </div>
-        {!isInfo && (
+        {!isInfo && shellyState() && (
           <div class={styles.quickIncludes}>
             <WidgetQuickControls config={config} state={shellyState()} />
           </div>

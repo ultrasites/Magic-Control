@@ -4,7 +4,7 @@ import Widget from "./components/Widget";
 import styles from "./App.module.css";
 import "solid-slider/slider.css";
 import { defaultConfig } from "./defaultConfig";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/de";
@@ -12,6 +12,7 @@ import "dayjs/locale/de";
 dayjs.extend(customParseFormat);
 dayjs.extend(relativeTime);
 dayjs.locale("de");
+
 function App() {
   const [slider] = createSlider({ loop: true });
   let ref: HTMLDivElement;

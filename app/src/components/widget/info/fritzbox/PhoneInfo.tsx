@@ -1,8 +1,9 @@
-import { useI18n } from "@amoutonbrady/solid-i18n";
 import Icon from "../../../Icon";
 import styles from "./PhoneInfo.module.css";
 import {} from "../../../Widget.utils";
 import { WidgetConfig } from "../../../Widget.types";
+import { useContext } from "solid-js";
+import { AppContext } from "../../../AppProvider";
 
 export interface IPhoneInfo {
   config: WidgetConfig<"PHONE", "Fritzbox">;
@@ -13,8 +14,8 @@ export interface IPhoneInfo {
 //TODO analyse and implement "activeCall" with duration programatically
 
 export default function PhoneInfo(props: IPhoneInfo) {
-  const [t] = useI18n();
-
+  const { translate } = useContext(AppContext);
+  const t = translate!;
   return (
     <>
       {props.phoneNumber && (
@@ -26,7 +27,7 @@ export default function PhoneInfo(props: IPhoneInfo) {
             <div
               classList={{
                 // [styles.error]: props.mode === "incomingCall",
-                [styles.success]: true,
+                [styles.success]: true
               }}
             >
               {t(props.mode === "activeCall" ? "activeCall" : "incomingCall")}

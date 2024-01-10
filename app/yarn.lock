@@ -2,13 +2,6 @@
 # yarn lockfile v1
 
 
-"@amoutonbrady/solid-i18n@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@amoutonbrady/solid-i18n/-/solid-i18n-0.4.0.tgz#ccb138b58085d2a900fe169aa4a5311dd1eab613"
-  integrity sha512-r8tnmolZ+Fjy0SgideVmj0H4vh7Nfko/Fr1crRptrXsgoU1PftyG7m6MOAoCyG+ax2xy+Q5rvtBlJ6leIUD7WQ==
-  dependencies:
-    solid-js "^1.0.0"
-
 "@ampproject/remapping@^2.2.0":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.2.1.tgz#99e8e11851128b8702cd57c33684f1d0f260b630"
@@ -438,14 +431,6 @@
   resolved "https://registry.yarnpkg.com/@jridgewell/set-array/-/set-array-1.1.2.tgz#7c6cf998d6d20b914c0a55a91ae928ff25965e72"
   integrity sha512-xnkseuNADM0gt2bs+BvhO0p78Mk762YnZdsuzFV018NoG1Sj1SCQvpSqa7XUaTam5vAGasABV9qXASMKnFMwMw==
 
-"@jridgewell/source-map@^0.3.3":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@jridgewell/source-map/-/source-map-0.3.5.tgz#a3bb4d5c6825aab0d281268f47f6ad5853431e91"
-  integrity sha512-UTYAUj/wviwdsMfzoSJspJxbkH5o1snzwX0//0ENX1u/55kkZZkcTZP6u9bwKGkv+dkk9at4m1Cpt0uY80kcpQ==
-  dependencies:
-    "@jridgewell/gen-mapping" "^0.3.0"
-    "@jridgewell/trace-mapping" "^0.3.9"
-
 "@jridgewell/sourcemap-codec@^1.4.10", "@jridgewell/sourcemap-codec@^1.4.14":
   version "1.4.15"
   resolved "https://registry.yarnpkg.com/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.4.15.tgz#d7c6e6755c78567a951e04ab52ef0fd26de59f32"
@@ -458,6 +443,11 @@
   dependencies:
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
+
+"@solid-primitives/i18n@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@solid-primitives/i18n/-/i18n-2.0.0.tgz#4670c36e3661fd1088120e0ea3f991d12f5c5cc2"
+  integrity sha512-2sfhiUGl3eCPrDnPpQapbKnZ2iVo1IY6aI5vJTozc2fIf/yEM2+LlCY4PwQTf8vkM5B0Pf3jA+7vC70fR6xbmg==
 
 "@solid-primitives/timer@^1.3.4":
   version "1.3.7"
@@ -537,11 +527,6 @@ abort-controller@^3.0.0:
   integrity sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==
   dependencies:
     event-target-shim "^5.0.0"
-
-acorn@^8.8.2:
-  version "8.11.2"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.11.2.tgz#ca0d78b51895be5390a5903c5b3bdcdaf78ae40b"
-  integrity sha512-nc0Axzp/0FILLEVsm4fNwLCwMttvhEI263QtVPQcbpfZZ3ts0hLsZGOpE6czNlid7CJ9MlyH8reXkpsf3YUY4w==
 
 ansi-styles@^3.2.1:
   version "3.2.1"
@@ -642,11 +627,6 @@ color-name@1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
   integrity sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==
-
-commander@^2.20.0:
-  version "2.20.3"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
-  integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
 commist@^3.2.0:
   version "3.2.0"
@@ -1037,7 +1017,7 @@ seroval@^0.11.6:
   resolved "https://registry.yarnpkg.com/seroval/-/seroval-0.11.6.tgz#ec5ef38a7ac34cac116f6028d505c163c3767973"
   integrity sha512-Lhy+94CNcNza6d0vM4sQKLsaLaX39q0ELqIBc7DkdiFljI8Q387Yb+xKgLxRWXs7uuHRu/ZcJ64xfVJ0Bj4LPg==
 
-solid-js@^1.0.0, solid-js@^1.7.11:
+solid-js@^1.7.11:
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.8.3.tgz#cf0776b330ec136d4a5885a7459094ad40047c3a"
   integrity sha512-S7ztgPI6X4tUaWmhZe3aDx0E9F6FGxXVU8NsocrPqqUbxHoFi8eTPlDMcenOlXuo2ITQ97j2URaj0StfJci4KQ==
@@ -1077,19 +1057,6 @@ source-map-js@^1.0.2:
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
-source-map-support@~0.5.20:
-  version "0.5.21"
-  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.21.tgz#04fe7c7f9e1ed2d662233c28cb2b35b9f63f6e4f"
-  integrity sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==
-  dependencies:
-    buffer-from "^1.0.0"
-    source-map "^0.6.0"
-
-source-map@^0.6.0:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
-  integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
-
 split2@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/split2/-/split2-4.2.0.tgz#c9c5920904d148bab0b9f67145f245a86aadbfa4"
@@ -1113,16 +1080,6 @@ supports-color@^5.3.0:
   integrity sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==
   dependencies:
     has-flag "^3.0.0"
-
-terser@^5.24.0:
-  version "5.24.0"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-5.24.0.tgz#4ae50302977bca4831ccc7b4fef63a3c04228364"
-  integrity sha512-ZpGR4Hy3+wBEzVEnHvstMvqpD/nABNelQn/z2r0fjVWGQsN3bpOLzQlqDxmb4CDZnXq5lpjnQ+mHQLAOpfM5iw==
-  dependencies:
-    "@jridgewell/source-map" "^0.3.3"
-    acorn "^8.8.2"
-    commander "^2.20.0"
-    source-map-support "~0.5.20"
 
 to-fast-properties@^2.0.0:
   version "2.0.0"

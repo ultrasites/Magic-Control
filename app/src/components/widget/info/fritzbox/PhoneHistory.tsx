@@ -32,9 +32,11 @@ export default function PhoneHistory(props: IPhoneHistory) {
       )
     )
     .pipe(
-      map((phoneHistory) =>
-        setPhoneHistoryData(phoneHistory.map(phoneHistoryFromDTO))
-      )
+      map((phoneHistory) => {
+        if (Array.isArray(phoneHistory)) {
+          setPhoneHistoryData(phoneHistory.map(phoneHistoryFromDTO));
+        }
+      })
     );
 
   onMount(() => {

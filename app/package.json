@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@amoutonbrady/solid-i18n": "^0.4.0",
+    "@solid-primitives/i18n": "^2.0.0",
     "dayjs": "^1.11.10",
     "mqtt": "^5.1.4",
     "rxjs": "^7.8.1",
@@ -19,7 +19,6 @@
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^6.4.2",
     "@types/node": "^20.8.7",
-    "terser": "^5.24.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vite-plugin-solid": "^2.7.0"

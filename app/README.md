@@ -1,3 +1,7 @@
+# Magic Control
+
+Magic Control is a module for [MagicMirror²](https://magicmirror.builders/) written with [SolidJS](https://www.solidjs.com/).
+
 ## Usage
 
 ```bash

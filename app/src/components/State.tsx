@@ -1,5 +1,6 @@
-import { useI18n } from "@amoutonbrady/solid-i18n";
 import styles from "./State.module.css";
+import { useContext } from "solid-js";
+import { AppContext } from "./AppProvider";
 
 export type StateType =
   | "on"
@@ -10,7 +11,8 @@ export type StateType =
   | "open"
   | "connecting"
   | "idle"
-  | "error";
+  | "error"
+  | "stopped";
 
 export interface IState {
   state: StateType;
@@ -18,9 +20,13 @@ export interface IState {
 }
 
 export default function State(props: IState) {
-  const [t] = useI18n();
+  const { translate } = useContext(AppContext);
+  const t = translate!;
   return (
-    <>
+    <div class={styles.host}>
+      {(props.state === "connecting" ||
+        props.state === "slidingDown" ||
+        props.state === "slidingUp") && <span class={styles.spinner}></span>}
       <span
         classList={{
           [styles.state]: true,
@@ -32,21 +38,25 @@ export default function State(props: IState) {
           [styles.error]:
             props.state === "error" ||
             props.state === "off" ||
-            props.state === "closed",
+            props.state === "closed"
         }}
       >
-        {t(props.state)}
+        {props.state === "on" || props.state === "off"
+          ? "⏺"
+          : props.state !== "idle"
+            ? t(props.state)
+            : ""}
       </span>
       {props.value && (
         <span
           classList={{
             [styles.state]: true,
-            [styles.value]: true,
+            [styles.value]: true
           }}
         >
-          {props.value}
+          {props.value}%
         </span>
       )}
-    </>
+    </div>
   );
 }

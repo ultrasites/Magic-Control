@@ -27,6 +27,8 @@ export interface WidgetRestConfig<T extends WidgetType> {
     ip: string;
     endpoints: T extends "DIMMED_LIGHT"
       ? { set: string }
+      : T extends "SHUTTER"
+      ? { set: string }
       : { [key: string]: string };
   };
 }

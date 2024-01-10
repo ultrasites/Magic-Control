@@ -4,13 +4,8 @@ import solid from "vite-plugin-solid";
 export default defineConfig({
   plugins: [solid()],
   build: {
-    minify: "terser",
+    minify: "esbuild",
     outDir: "../",
-    terserOptions: {
-      mangle: {
-        reserved: ["io"]
-      }
-    },
     rollupOptions: {
       output: {
         assetFileNames: "mm-io-app[extname]",

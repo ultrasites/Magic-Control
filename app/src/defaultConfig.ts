@@ -2,20 +2,22 @@ import { WidgetConfig } from "./components/Widget.types";
 import { MMIO_Config } from "./config";
 
 export const defaultConfig: MMIO_Config = [
-  // {
-  //   name: "Telefon",
-  //   position: "Fritzbox",
-  //   topics: {
-  //     ring: "ring",
-  //     ringNumber: "ringnumber",
-  //     history: "history",
-  //     phonebook: "phonebook",
-  //     connected: "connected",
-  //   },
-  //   id: "fritzbox",
-  //   type: "PHONE",
-  //   device: "Fritzbox",
-  // } satisfies WidgetConfig<"PHONE", "Fritzbox">,
+  {
+    name: "Telefon",
+    position: "Fritzbox",
+    mqtt: {
+      topics: {
+        ring: "ring",
+        ringNumber: "ringnumber",
+        history: "history",
+        phonebook: "phonebook",
+        connected: "connected",
+      },
+      id: "fritzbox",
+    },
+    type: "PHONE",
+    device: "Fritzbox",
+  } satisfies WidgetConfig<"PHONE", "Fritzbox">,
   {
     name: "Licht",
     position: "links",
@@ -34,6 +36,24 @@ export const defaultConfig: MMIO_Config = [
     type: "DIMMED_LIGHT",
     device: "Shelly",
   } satisfies WidgetConfig<"DIMMED_LIGHT", "Shelly">,
+  {
+    name: "Raffstore",
+    position: "Tür (rechts)",
+    mqtt: {
+      id: "shellyplus2pm-5443b23f7ef4",
+      topics: {
+        connected: "online",
+        status: "status/cover:0",
+        info: "status/sys",
+      },
+    },
+    rest: {
+      ip: "192.168.178.147",
+      endpoints: { set: "roller/0" },
+    },
+    type: "SHUTTER",
+    device: "Shelly",
+  } satisfies WidgetConfig<"SHUTTER", "Shelly">,
   //   {
   //     name: "Licht",
   //     position: "rechts",
