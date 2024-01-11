@@ -73,7 +73,7 @@ export default function WidgetDetails(props: IWidgetDetails) {
               return Promise.resolve();
             }}
           >
-            {t("on")}
+            <i class="fa-solid fa-lightbulb" />
           </Button>
           <Button
             disabled={
@@ -92,7 +92,7 @@ export default function WidgetDetails(props: IWidgetDetails) {
               return Promise.resolve();
             }}
           >
-            {t("off")}
+            <i class="fa-regular fa-lightbulb" />
           </Button>
         </div>
       </section>

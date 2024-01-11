@@ -1,5 +1,5 @@
 import * as mqtt from "mqtt/dist/mqtt.min";
-import { Subject, filter, map, distinctUntilChanged, tap } from "rxjs";
+import { Subject, distinctUntilChanged, filter, map, tap } from "rxjs";
 
 export interface MqttMessage {
   topic: string;
@@ -18,7 +18,7 @@ export class MQTT {
       host: "localhost",
       port: 1884,
       protocol: "ws",
-      clientId: "mmio",
+      clientId: "mmio"
     });
 
     this.client.on("connect", (err) => {

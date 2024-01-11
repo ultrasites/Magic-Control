@@ -2,13 +2,13 @@ import { IconMode } from "./Icon";
 import styles from "./Widget.module.css";
 import State from "./State";
 import { StateType } from "./State";
-import { createSignal, onCleanup, onMount, useContext } from "solid-js";
+import { createSignal, useContext } from "solid-js";
 import { AppContext } from "./AppProvider";
 import {
   isInfoWidget,
   isFritzboxPhone,
   generateTopic,
-  isShelly,
+  isShelly
 } from "./Widget.utils";
 import { Subscription, map } from "rxjs";
 import PhoneInfo from "./widget/info/fritzbox/PhoneInfo";
@@ -21,7 +21,7 @@ import { info$, status$ } from "./widget/info/shelly/Shelly.observables";
 import { ShellyInfo, StatusTypes } from "./widget/info/shelly/Shelly.types";
 import {
   isLightStatus,
-  isShutterStatus,
+  isShutterStatus
 } from "./widget/info/shelly/Shelly.utils";
 import { Device, WidgetConfig, WidgetType } from "./Widget.types";
 import WidgetQuickControls from "./WidgetQuickControls";
@@ -44,7 +44,7 @@ export default function Widget(props: IWidget) {
     state: StateType;
     value?: string;
   }>({
-    state: "connecting",
+    state: "connecting"
   });
   const [phoneNumber, setPhoneNumber] = createSignal<string>("");
   const [shellyState, setShellyState] = createSignal<StatusTypes | undefined>(
@@ -71,72 +71,75 @@ export default function Widget(props: IWidget) {
   const closeModal = () =>
     (document.getElementById(id) as HTMLDialogElement).close();
 
-  onMount(() => {
-    Object.values(config.mqtt.topics).map((topic) =>
-      mqtt?.subscribe(generateTopic(config.mqtt.id, topic, config))
-    );
-    subscription.add(connected$.subscribe());
+  //TODO Refactor WidgetController -> Widget or InfoWidget
 
-    if (isShelly(config)) {
-      subscription.add(
-        status$<typeof config.type>(mqtt!, config).subscribe({
-          next: (status) => {
-            if (isLightStatus(status)) {
-              setState({
-                state: status.ison ? "on" : "off",
-                ...(status.ison && {
-                  value: status.brightness.toString(),
-                }),
-              });
-            }
+  Object.values(config.mqtt.topics).map(
+    (topic) => mqtt?.subscribe(generateTopic(config.mqtt.id, topic, config))
+  );
+  subscription.add(connected$.subscribe());
 
-            if (isShutterStatus(status)) {
-              setState({
-                state:
-                  status.state === "closing"
-                    ? "slidingDown"
-                    : status.state === "opening"
+  if (isShelly(config)) {
+    subscription.add(
+      status$<typeof config.type>(mqtt!, config).subscribe({
+        next: (status) => {
+          if (isLightStatus(status)) {
+            setState({
+              state: status.ison ? "on" : "off",
+              ...(status.ison && {
+                value: status.brightness.toString()
+              })
+            });
+          }
+
+          if (isShutterStatus(status)) {
+            setState({
+              state:
+                status.state === "closing"
+                  ? "slidingDown"
+                  : status.state === "opening"
                     ? "slidingUp"
                     : status.state,
-                value: status.current_pos.toString(),
-              });
-            }
-            return setShellyState(status);
-          },
-        })
-      );
-
-      subscription.add(
-        info$<typeof config.type>(mqtt!, config).subscribe({
-          next: (info) => {
-            setShellyInfo(info as ShellyInfo);
-          },
-        })
-      );
-    }
-
-    if (isFritzboxPhone(config)) {
-      subscription.add(
-        phoneRing$(mqtt!, config).subscribe({
-          next: ([ring, phoneNumber]) => {
-            setPhoneNumber(ring ? phoneNumber : "");
-            if (ring) {
-              showModal();
-            } else {
-              closeModal();
-            }
-          },
-        })
-      );
-    }
-  });
-
-  onCleanup(() => {
-    Object.values(config.mqtt.topics).map((topic) =>
-      mqtt?.unsubcribe(generateTopic(config.mqtt.id, topic, config))
+              value: status.current_pos.toString()
+            });
+          }
+          return setShellyState(status);
+        }
+      })
     );
-    subscription?.unsubscribe();
-  });
+
+    subscription.add(
+      info$<typeof config.type>(mqtt!, config).subscribe({
+        next: (info) => {
+          setShellyInfo(info as ShellyInfo);
+        }
+      })
+    );
+  }
+
+  if (isFritzboxPhone(config)) {
+    subscription.add(
+      phoneRing$(mqtt!, config).subscribe({
+        next: ([ring, phoneNumber]) => {
+          setPhoneNumber(ring ? phoneNumber : "");
+          if (ring) {
+            showModal();
+          } else {
+            closeModal();
+          }
+        }
+      })
+    );
+  }
+  // onMount(() => {
+  //   console.log("onMount Widget!!!!");
+  // });
+
+  // onCleanup(() => {
+  //   Object.values(config.mqtt.topics).map(
+  //     (topic) => mqtt?.unsubcribe(generateTopic(config.mqtt.id, topic, config))
+  //   );
+  //   subscription?.unsubscribe();
+  // });
 
   const renderModal = () => {
     if (isFritzboxPhone(config)) {
@@ -156,7 +159,7 @@ export default function Widget(props: IWidget) {
             uptime: shellyInfo()?.uptime,
             state: state().state,
             value: state().value,
-            shellyState: shellyState(),
+            shellyState: shellyState()
           }}
         />
       );
@@ -169,12 +172,12 @@ export default function Widget(props: IWidget) {
         onClick={() => !isFritzboxPhone(config) && showModal()}
         classList={{
           [styles.widget]: true,
-          [styles.info]: isInfo,
+          [styles.info]: isInfo
         }}
       >
         <div
           classList={{
-            [styles.content]: true,
+            [styles.content]: true
           }}
         >
           <WidgetHeader
