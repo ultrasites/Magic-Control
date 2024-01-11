@@ -2,27 +2,27 @@ import { WidgetConfig } from "./components/Widget.types";
 import { MMIO_Config } from "./config";
 
 export const defaultConfig: MMIO_Config = [
-  {
-    name: "Telefon",
-    position: "Fritzbox",
-    mqtt: {
-      topics: {
-        ring: "ring",
-        ringNumber: "ringnumber",
-        history: "history",
-        phonebook: "phonebook",
-        connected: "connected"
-      },
-      id: "fritzbox"
-    },
-    type: "PHONE",
-    device: "Fritzbox"
-  } satisfies WidgetConfig<"PHONE", "Fritzbox">,
+  // {
+  //   name: "Telefon",
+  //   position: "Fritzbox",
+  //   mqtt: {
+  //     topics: {
+  //       ring: "ring",
+  //       ringNumber: "ringnumber",
+  //       history: "history",
+  //       phonebook: "phonebook",
+  //       connected: "connected"
+  //     },
+  //     id: "fritzbox"
+  //   },
+  //   type: "PHONE",
+  //   device: "Fritzbox"
+  // } satisfies WidgetConfig<"PHONE", "Fritzbox">,
   {
     name: "Licht",
     position: "links",
     mqtt: {
-      id: "shellydimmer2-A848FAE62ED1",
+      id: "shelly-licht-links",
       topics: {
         connected: "online",
         status: "light/0/status",
@@ -37,10 +37,46 @@ export const defaultConfig: MMIO_Config = [
     device: "Shelly"
   } satisfies WidgetConfig<"DIMMED_LIGHT", "Shelly">,
   {
+    name: "Licht",
+    position: "rechts",
+    mqtt: {
+      id: "shelly-licht-rechts",
+      topics: {
+        connected: "online",
+        status: "light/0/status",
+        info: "info"
+      }
+    },
+    rest: {
+      ip: "192.168.178.144",
+      endpoints: { set: "light/0" }
+    },
+    type: "DIMMED_LIGHT",
+    device: "Shelly"
+  } satisfies WidgetConfig<"DIMMED_LIGHT", "Shelly">,
+  {
+    name: "Raffstore",
+    position: "Tür (links)",
+    mqtt: {
+      id: "shelly-tuer-links",
+      topics: {
+        connected: "online",
+        status: "status/cover:0",
+        info: "status/sys"
+      }
+    },
+    rest: {
+      ip: "192.168.178.143",
+      endpoints: { set: "roller/0" }
+    },
+    type: "SHUTTER",
+    device: "Shelly"
+  } satisfies WidgetConfig<"SHUTTER", "Shelly">,
+  {
     name: "Raffstore",
     position: "Tür (rechts)",
     mqtt: {
-      id: "shellyplus2pm-5443b23f7ef4",
+      id: "shelly-tuer-rechts",
       topics: {
         connected: "online",
         status: "status/cover:0",
@@ -56,9 +92,9 @@ export const defaultConfig: MMIO_Config = [
   } satisfies WidgetConfig<"SHUTTER", "Shelly">,
   {
     name: "Raffstore",
-    position: "Tür (rechts)",
+    position: "Fenster",
     mqtt: {
-      id: "shellyplus2pm-5443b23f7ef4",
+      id: "shelly-fenster",
       topics: {
         connected: "online",
         status: "status/cover:0",
@@ -66,25 +102,7 @@ export const defaultConfig: MMIO_Config = [
       }
     },
     rest: {
-      ip: "192.168.178.147",
-      endpoints: { set: "roller/0" }
-    },
-    type: "SHUTTER",
-    device: "Shelly"
-  } satisfies WidgetConfig<"SHUTTER", "Shelly">,
-  {
-    name: "Raffstore",
-    position: "Tür (rechts)",
-    mqtt: {
-      id: "shellyplus2pm-a",
-      topics: {
-        connected: "online",
-        status: "status/cover:0",
-        info: "status/sys"
-      }
-    },
-    rest: {
-      ip: "192.168.178.147",
+      ip: "192.168.178.148",
       endpoints: { set: "roller/0" }
     },
     type: "SHUTTER",

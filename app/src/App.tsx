@@ -13,7 +13,7 @@ dayjs.extend(relativeTime);
 dayjs.locale("de");
 
 function App() {
-  const [slider] = createSlider({ slides: { perView: 5, spacing: 5 } });
+  const [slider] = createSlider({ slides: { perView: 5, spacing: 15 } });
   let ref: HTMLDivElement;
   onMount(() => {
     slider(ref);
