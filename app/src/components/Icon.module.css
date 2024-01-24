@@ -1,0 +1,19 @@
+.success {
+  color: var(--color-mmio-green);
+}
+
+.warning {
+  color: var(--color-mmio-orange);
+}
+
+.error {
+  color: var(--color-mmio-red);
+}
+
+.default {
+  color: var(--color-text-dimmed);
+}
+
+.big {
+  font-size: 2.3em;
+}

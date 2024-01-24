@@ -1,0 +1,38 @@
+.widget {
+  background-color: rgba(16, 16, 16, 0.8);
+  border-radius: 10px;
+  padding: 9px;
+  color: var(--color-text-bright);
+  display: grid;
+  grid-template-columns: auto 35%;
+  justify-content: space-between;
+  text-align: start;
+  gap: 20px;
+  min-width: 250px;
+  min-height: 100px;
+}
+
+.info {
+  grid-template-columns: 1fr;
+}
+
+.infoContent {
+  justify-content: start;
+}
+
+.actionContent {
+  justify-content: space-between;
+}
+
+.quickIncludes {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

@@ -1,0 +1,17 @@
+.phoneInfo {
+  display: grid;
+  grid-template-columns: 50px auto;
+  align-items: center;
+}
+
+.success {
+  color: var(--color-mmio-green);
+}
+
+.error {
+  color: var(--color-mmio-red);
+}
+
+.phoneNumber {
+  font-size: 1.7em;
+}

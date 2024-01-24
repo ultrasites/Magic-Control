@@ -1,0 +1,67 @@
+.slider {
+  display: grid;
+  grid-template-columns: auto 60px;
+  gap: 10px;
+  padding: 20px 0;
+  justify-items: center;
+}
+
+.percent {
+  color: var(--color-text-bright);
+}
+
+/********** Range Input Styles **********/
+/*Range Reset*/
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  width: 100%;
+}
+
+/* Removes default focus */
+input[type="range"]:focus {
+  outline: none;
+}
+
+/***** Chrome, Safari, Opera and Edge Chromium styles *****/
+/* slider track */
+input[type="range"]::-webkit-slider-runnable-track {
+  background-color: var(--color-text-dimmed);
+  border-radius: 0.5rem;
+  height: 0.5rem;
+}
+
+/* slider thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  margin-top: -14px; /* Centers thumb on the track */
+
+  /*custom styles*/
+  background-color: var(--color-text-bright);
+  height: 2.7em;
+  width: 2.7em;
+  border-radius: 100%;
+}
+
+input[type="range"]:disabled::-webkit-slider-thumb:disabled {
+  background-color: var(--color-text-dimmed);
+}
+
+/******** Firefox styles ********/
+/* slider track */
+input[type="range"]::-moz-range-track {
+  background-color: var(--color-text-dimmed);
+  border-radius: 0.5rem;
+  height: 0.5rem;
+}
+
+/* slider thumb */
+input[type="range"]::-moz-range-thumb {
+  /*custom styles*/
+  background-color: var(--color-text-bright);
+  height: 2em;
+  width: 2em;
+  border-radius: 100%;
+}

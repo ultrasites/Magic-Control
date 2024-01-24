@@ -1,0 +1,55 @@
+.button {
+  border-radius: 9999px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--color-text-bright);
+  padding: 8px;
+  min-height: 1em;
+  transition: all 0.2s linear;
+}
+
+.buttonDisabled {
+  border-color: var(--color-text-dimmed);
+}
+
+.buttonActiveDisabled {
+  background: var(--color-text-dimmed) !important;
+}
+
+.inlay {
+  position: relative;
+  width: 100%;
+}
+
+.buttonOn {
+  background: var(--color-text-bright);
+}
+
+.circle {
+  border-radius: 100%;
+  background: var(--color-text-bright);
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  transition-property: left;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0s;
+}
+
+.circleDisabled {
+  background: var(--color-text-dimmed) !important;
+}
+
+.circleActiveDisabled {
+  background: var(--color-background) !important;
+}
+
+.circleOn {
+  background: var(--color-background);
+  left: calc(100% - 16px);
+}
+
+.circleOff {
+  left: 0%;
+}

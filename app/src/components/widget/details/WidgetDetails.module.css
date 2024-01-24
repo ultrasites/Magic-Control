@@ -1,0 +1,19 @@
+.footer {
+  color: var(--color-text-dimmed);
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 10px;
+  justify-content: left;
+}
+
+.flexGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+section {
+  display: grid;
+  gap: 20px;
+}
