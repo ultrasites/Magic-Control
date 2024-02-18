@@ -10,16 +10,18 @@ import {
   generateTopic,
   isShelly
 } from "./Widget.utils";
-import { Subscription, map } from "rxjs";
-import PhoneInfo from "./widget/info/fritzbox/PhoneInfo";
-import Modal from "./Modal";
+import { Subscription, map, pairwise } from "rxjs";
 import { phoneRing$ } from "./widget/info/fritzbox/PhoneInfo.observables";
 import PhoneHistory from "./widget/info/fritzbox/PhoneHistory";
-import WidgetDetails from "./widget/details/WidgetDetails";
 import WidgetHeader from "./widget/WidgetHeader";
-import { info$, status$ } from "./widget/info/shelly/Shelly.observables";
+import {
+  info$,
+  status$,
+  triggerCloseGarageGate$
+} from "./widget/info/shelly/Shelly.observables";
 import { ShellyInfo, StatusTypes } from "./widget/info/shelly/Shelly.types";
 import {
+  isGarageGateStatus,
   isLightStatus,
   isShutterStatus
 } from "./widget/info/shelly/Shelly.utils";
@@ -30,9 +32,13 @@ export interface IWidget {
   onClick?: () => void;
   config: WidgetConfig<WidgetType, Device>;
 }
+export const TIME_GARAGE_GATE_DOWN = 19000;
+export const TIME_GARAGE_GATE_UP = 12000;
+export const GARAGE_GATE_OFFSET = 2000;
 
 export default function Widget(props: IWidget) {
-  const { mqtt } = useContext(AppContext);
+  const { mqtt, translate } = useContext(AppContext);
+  const t = translate!;
   const subscription: Subscription = new Subscription();
 
   const isInfo = isInfoWidget(props.config.type);
@@ -46,11 +52,11 @@ export default function Widget(props: IWidget) {
   }>({
     state: "connecting"
   });
-  const [phoneNumber, setPhoneNumber] = createSignal<string>("");
+  const [_phoneNumber, setPhoneNumber] = createSignal<string>("");
   const [shellyState, setShellyState] = createSignal<StatusTypes | undefined>(
     undefined
   );
-  const [shellyInfo, setShellyInfo] = createSignal<ShellyInfo | undefined>(
+  const [_shellyInfo, setShellyInfo] = createSignal<ShellyInfo | undefined>(
     undefined
   );
 
@@ -79,33 +85,83 @@ export default function Widget(props: IWidget) {
   subscription.add(connected$.subscribe());
 
   if (isShelly(config)) {
-    subscription.add(
-      status$<typeof config.type>(mqtt!, config).subscribe({
-        next: (status) => {
-          if (isLightStatus(status)) {
-            setState({
-              state: status.ison ? "on" : "off",
-              ...(status.ison && {
-                value: status.brightness.toString()
-              })
-            });
-          }
+    const garageGateStatus$ = status$<typeof config.type>(mqtt!, config)
+      .pipe(pairwise())
+      .subscribe({
+        next: ([prevStatus, status]) => {
+          console.log("hier");
+          if (isGarageGateStatus(status) && isGarageGateStatus(prevStatus)) {
+            console.log(status);
+            if (!prevStatus.state && status.state) {
+              setState({
+                state: "slidingUp"
+              });
 
-          if (isShutterStatus(status)) {
-            setState({
-              state:
-                status.state === "closing"
-                  ? "slidingDown"
-                  : status.state === "opening"
-                    ? "slidingUp"
-                    : status.state,
-              value: status.current_pos.toString()
-            });
+              setTimeout(() => {
+                setState({
+                  state: "open"
+                });
+              }, TIME_GARAGE_GATE_UP);
+            }
+
+            if (prevStatus.state && !status.state) {
+              setState({
+                state: "closed"
+              });
+            }
           }
-          return setShellyState(status);
         }
-      })
+      });
+
+    const simpleStatus$ = status$<typeof config.type>(mqtt!, config).subscribe({
+      next: (status) => {
+        if (isLightStatus(status)) {
+          setState({
+            state: status.ison ? "on" : "off",
+            ...(status.ison && {
+              value: status.brightness.toString()
+            })
+          });
+        }
+        if (isShutterStatus(status)) {
+          setState({
+            state:
+              status.state === "closing"
+                ? "slidingDown"
+                : status.state === "opening"
+                  ? "slidingUp"
+                  : status.state,
+            value: status.current_pos.toString()
+          });
+        }
+        return setShellyState(status);
+      }
+    });
+
+    subscription.add(
+      config.type === "GARAGE_GATE" ? garageGateStatus$ : simpleStatus$
     );
+
+    if (config.type === "GARAGE_GATE") {
+      subscription.add(
+        triggerCloseGarageGate$.subscribe({
+          next: () => {
+            setState({
+              state: "slidingDown"
+            });
+
+            setTimeout(() => {
+              if (state().state !== "closed") {
+                setState({
+                  state: "error",
+                  value: t("errorGarageGateDown")
+                });
+              }
+            }, TIME_GARAGE_GATE_DOWN + GARAGE_GATE_OFFSET);
+          }
+        })
+      );
+    }
 
     subscription.add(
       info$<typeof config.type>(mqtt!, config).subscribe({
@@ -141,35 +197,35 @@ export default function Widget(props: IWidget) {
   //   subscription?.unsubscribe();
   // });
 
-  const renderModal = () => {
-    if (isFritzboxPhone(config)) {
-      return (
-        <PhoneInfo
-          config={config}
-          mode="incomingCall"
-          phoneNumber={phoneNumber()}
-        />
-      );
-    } else if (isShelly(config) && shellyState()) {
-      return (
-        <WidgetDetails
-          config={config}
-          values={{
-            connected: connected(),
-            uptime: shellyInfo()?.uptime,
-            state: state().state,
-            value: state().value,
-            shellyState: shellyState()
-          }}
-        />
-      );
-    }
-  };
+  // const renderModal = () => {
+  //   if (isFritzboxPhone(config)) {
+  //     return (
+  //       <PhoneInfo
+  //         config={config}
+  //         mode="incomingCall"
+  //         phoneNumber={phoneNumber()}
+  //       />
+  //     );
+  //   } else if (isShelly(config) && shellyState()) {
+  //     return (
+  //       <WidgetDetails
+  //         config={config}
+  //         values={{
+  //           connected: connected(),
+  //           uptime: shellyInfo()?.uptime,
+  //           state: state().state,
+  //           value: state().value,
+  //           shellyState: shellyState()
+  //         }}
+  //       />
+  //     );
+  //   }
+  // };
 
   return (
     <>
       <div
-        onClick={() => !isFritzboxPhone(config) && showModal()}
+        // onClick={() => !isFritzboxPhone(config) && showModal()}
         classList={{
           [styles.widget]: true,
           [styles.info]: isInfo
@@ -187,16 +243,30 @@ export default function Widget(props: IWidget) {
           />
           <div>
             {isFritzboxPhone(config) && <PhoneHistory config={config} />}
-            {!isInfo && <State state={state().state} value={state().value} />}
+            {!isInfo && (
+              <State
+                state={state().state}
+                value={`${state().value ?? ""}${
+                  state().value &&
+                  (config.type === "DIMMED_LIGHT" || config.type === "SHUTTER")
+                    ? "%"
+                    : ""
+                }`}
+              />
+            )}
           </div>
         </div>
         {!isInfo && shellyState() && (
           <div class={styles.quickIncludes}>
-            <WidgetQuickControls config={config} state={shellyState()} />
+            <WidgetQuickControls
+              config={config}
+              shellyState={shellyState()}
+              state={state().state}
+            />
           </div>
         )}
       </div>
-      <Modal id={id}>{renderModal()}</Modal>
+      {/* <Modal id={id}>{renderModal()}</Modal> */}
     </>
   );
 }

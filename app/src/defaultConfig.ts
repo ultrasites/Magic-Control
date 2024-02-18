@@ -19,6 +19,24 @@ export const defaultConfig: MMIO_Config = [
   //   device: "Fritzbox"
   // } satisfies WidgetConfig<"PHONE", "Fritzbox">,
   {
+    name: "Garagentor",
+    position: "Garage",
+    mqtt: {
+      id: "shelly-garage",
+      topics: {
+        connected: "online",
+        status: "status/input:100",
+        info: "status/sys"
+      }
+    },
+    rest: {
+      ip: "192.168.178.157",
+      endpoints: { set: "relay/0" }
+    },
+    type: "GARAGE_GATE",
+    device: "Shelly"
+  } satisfies WidgetConfig<"GARAGE_GATE", "Shelly">,
+  {
     name: "Licht",
     position: "links",
     mqtt: {

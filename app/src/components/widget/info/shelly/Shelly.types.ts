@@ -8,7 +8,12 @@ export interface ShutterStatus {
   current_pos: number;
 }
 
-export type StatusTypes = LightStatus | ShutterStatus;
+export interface GarageGateStatus {
+  state: boolean;
+  id: number;
+}
+
+export type StatusTypes = LightStatus | ShutterStatus | GarageGateStatus;
 
 export interface ShellyInfo {
   uptime: number;

@@ -17,8 +17,8 @@ export interface WidgetMqttConfig<T extends Device> {
             phonebook: string;
           }
         : T extends "TP-Link Tapo"
-        ? { setPower: string }
-        : { status: string; info: string });
+          ? { setPower: string }
+          : { status: string; info: string });
   };
 }
 
@@ -28,8 +28,10 @@ export interface WidgetRestConfig<T extends WidgetType> {
     endpoints: T extends "DIMMED_LIGHT"
       ? { set: string }
       : T extends "SHUTTER"
-      ? { set: string }
-      : { [key: string]: string };
+        ? { set: string }
+        : T extends "GARAGE_GATE"
+          ? { set: string }
+          : { [key: string]: string };
   };
 }
 

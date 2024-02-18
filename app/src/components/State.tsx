@@ -41,11 +41,11 @@ export default function State(props: IState) {
             props.state === "closed"
         }}
       >
-        {props.state === "on" || props.state === "off"
-          ? "⏺"
-          : props.state !== "idle"
-            ? t(props.state)
-            : ""}
+        {(props.state === "on" ||
+          props.state === "off" ||
+          props.state === "open" ||
+          props.state === "closed") && <i class="fa-solid fa-circle"></i>}
+        {props.state !== "idle" && ` ${t(props.state)}`}
       </span>
       {props.value && (
         <span
@@ -54,7 +54,7 @@ export default function State(props: IState) {
             [styles.value]: true
           }}
         >
-          {props.value}%
+          {props.value}
         </span>
       )}
     </div>

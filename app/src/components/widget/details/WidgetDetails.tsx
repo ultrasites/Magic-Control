@@ -8,6 +8,7 @@ import { StatusTypes } from "../info/shelly/Shelly.types";
 import Slider from "../../Slider";
 import {
   isLightStatus,
+  isShutterStatus,
   shellyRestCallAction
 } from "../info/shelly/Shelly.utils";
 import { WidgetConfig, WidgetType } from "../../Widget.types";
@@ -103,7 +104,9 @@ export default function WidgetDetails(props: IWidgetDetails) {
             value={
               isLightStatus(props.values.shellyState!)
                 ? props.values.shellyState?.brightness.toString()
-                : props.values.shellyState?.current_pos.toString()
+                : isShutterStatus(props.values.shellyState!)
+                  ? props.values.shellyState?.current_pos.toString()
+                  : undefined
             }
           />
         </div>

@@ -12,7 +12,8 @@ export const en_dict = {
   activeCall: "Active call",
   connectedSince: "Connected since:",
   hour: "Hour",
-  stopped: "stopped"
+  stopped: "stopped",
+  errorGarageGateDown: "Gate not closed!"
 };
 
 type Dict = typeof en_dict;
@@ -31,5 +32,6 @@ export const de_dict: Dict = {
   activeCall: "Aktiver Anruf",
   connectedSince: "Verbunden seit:",
   hour: "Uhr",
-  stopped: "gestoppt"
+  stopped: "gestoppt",
+  errorGarageGateDown: "Tor nicht geschlossen!"
 };

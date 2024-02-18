@@ -15,7 +15,7 @@ export class MQTT {
 
   constructor() {
     this.client = mqtt.connect({
-      host: "localhost",
+      hostname: "192.168.178.158",
       port: 1884,
       protocol: "ws",
       clientId: "mmio"
