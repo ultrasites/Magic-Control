@@ -38,7 +38,7 @@ export const defaultConfig: MMIO_Config = [
   } satisfies WidgetConfig<"GARAGE_GATE", "Shelly">,
   {
     name: "Licht",
-    position: "links",
+    position: "Fenster",
     mqtt: {
       id: "shelly-licht-links",
       topics: {
@@ -56,7 +56,7 @@ export const defaultConfig: MMIO_Config = [
   } satisfies WidgetConfig<"DIMMED_LIGHT", "Shelly">,
   {
     name: "Licht",
-    position: "rechts",
+    position: "Sofa",
     mqtt: {
       id: "shelly-licht-rechts",
       topics: {
@@ -74,7 +74,7 @@ export const defaultConfig: MMIO_Config = [
   } satisfies WidgetConfig<"DIMMED_LIGHT", "Shelly">,
   {
     name: "Raffstore",
-    position: "Tür (links)",
+    position: "Schiebetür links",
     mqtt: {
       id: "shelly-tuer-links",
       topics: {
@@ -92,7 +92,7 @@ export const defaultConfig: MMIO_Config = [
   } satisfies WidgetConfig<"SHUTTER", "Shelly">,
   {
     name: "Raffstore",
-    position: "Tür (rechts)",
+    position: "Schiebetür Terasse",
     mqtt: {
       id: "shelly-tuer-rechts",
       topics: {

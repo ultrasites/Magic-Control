@@ -8,7 +8,7 @@ export default defineConfig({
     outDir: "../",
     terserOptions: {
       mangle: {
-        reserved: ["io"]
+        reserved: ["io","$"]
       }
     },
     rollupOptions: {
