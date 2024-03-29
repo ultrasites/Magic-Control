@@ -19,9 +19,11 @@ document.addEventListener(
 
     render(
       () => (
-        <AppProvider>
-          <App />
-        </AppProvider>
+        <div style="margin-top:250px;">
+          <AppProvider>
+            <App />
+          </AppProvider>
+        </div>
       ),
       root!
     );

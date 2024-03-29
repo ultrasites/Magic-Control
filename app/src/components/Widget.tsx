@@ -19,14 +19,21 @@ import {
   status$,
   triggerCloseGarageGate$
 } from "./widget/info/shelly/Shelly.observables";
-import { ShellyInfo, StatusTypes } from "./widget/info/shelly/Shelly.types";
+import {
+  LightStatus,
+  ShellyInfo,
+  StatusTypes
+} from "./widget/info/shelly/Shelly.types";
 import {
   isGarageGateStatus,
   isLightStatus,
-  isShutterStatus
+  isShutterStatus,
+  shellyRestCallAction
 } from "./widget/info/shelly/Shelly.utils";
 import { Device, WidgetConfig, WidgetType } from "./Widget.types";
 import WidgetQuickControls from "./WidgetQuickControls";
+import Button from "./Button";
+import Slider from "./Slider";
 
 export interface IWidget {
   onClick?: () => void;
@@ -59,6 +66,7 @@ export default function Widget(props: IWidget) {
   const [_shellyInfo, setShellyInfo] = createSignal<ShellyInfo | undefined>(
     undefined
   );
+  const [isFrontpage, setFrontpage] = createSignal<boolean>(true);
 
   const connected$ = mqtt!
     .observe<boolean>(
@@ -223,50 +231,95 @@ export default function Widget(props: IWidget) {
   // };
 
   return (
-    <>
+    <div>
       <div
         // onClick={() => !isFritzboxPhone(config) && showModal()}
         classList={{
           [styles.widget]: true,
-          [styles.info]: isInfo
+          [styles.info]: isInfo,
+          [styles.widgetNotFrontpage]: !isFrontpage()
         }}
       >
-        <div
-          classList={{
-            [styles.content]: true
-          }}
-        >
-          <WidgetHeader
-            mode={connected()}
-            name={config.name}
-            position={config.position}
-          />
-          <div>
-            {isFritzboxPhone(config) && <PhoneHistory config={config} />}
-            {!isInfo && (
-              <State
-                state={state().state}
-                value={`${state().value ?? ""}${
-                  state().value &&
-                  (config.type === "DIMMED_LIGHT" || config.type === "SHUTTER")
-                    ? "%"
-                    : ""
-                }`}
+        {isFrontpage() ? (
+          <>
+            <div
+              classList={{
+                [styles.content]: true
+              }}
+            >
+              <WidgetHeader
+                mode={connected()}
+                name={config.name}
+                position={config.position}
               />
+              <div>
+                {isFritzboxPhone(config) && <PhoneHistory config={config} />}
+                {!isInfo && (
+                  <div class={styles.stateContent}>
+                    <State
+                      state={state().state}
+                      value={`${state().value ?? ""}${
+                        state().value &&
+                        (config.type === "DIMMED_LIGHT" ||
+                          config.type === "SHUTTER")
+                          ? "%"
+                          : ""
+                      }`}
+                    />{" "}
+                    {shellyState() && isLightStatus(shellyState()!) && (
+                      <Button
+                        onClick={() => {
+                          setFrontpage(!isFrontpage());
+                          return Promise.resolve();
+                        }}
+                      >
+                        <i class="fa-solid fa-sliders"></i>
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            {!isInfo && shellyState() && (
+              <div class={styles.quickIncludes}>
+                <WidgetQuickControls
+                  config={config}
+                  shellyState={shellyState()}
+                  state={state().state}
+                />
+              </div>
             )}
-          </div>
-        </div>
-        {!isInfo && shellyState() && (
-          <div class={styles.quickIncludes}>
-            <WidgetQuickControls
-              config={config}
-              shellyState={shellyState()}
-              state={state().state}
-            />
-          </div>
+          </>
+        ) : (
+          <>
+            <div>
+              {shellyState() !== undefined &&
+                isLightStatus(shellyState()!) &&
+                isShelly(config) && (
+                  <Slider
+                    value={(shellyState() as LightStatus).brightness}
+                    onChange={async (percent) =>
+                      await shellyRestCallAction(
+                        config.rest.ip,
+                        config.rest.endpoints.set,
+                        { brightness: percent }
+                      )
+                    }
+                  />
+                )}
+            </div>
+            <Button
+              onClick={() => {
+                setFrontpage(!isFrontpage());
+                return Promise.resolve();
+              }}
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </Button>
+          </>
         )}
       </div>
       {/* <Modal id={id}>{renderModal()}</Modal> */}
-    </>
+    </div>
   );
 }

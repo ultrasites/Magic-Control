@@ -4,12 +4,17 @@
   padding: 9px;
   color: var(--color-text-bright);
   display: grid;
-  grid-template-columns: auto 35%;
+  grid-template-columns: 1fr 35%;
   justify-content: space-between;
   text-align: start;
   gap: 20px;
   min-width: 250px;
   min-height: 100px;
+}
+
+.widgetNotFrontpage {
+  align-items: center;
+  grid-template-columns: 1fr auto;
 }
 
 .info {
@@ -35,4 +40,18 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.stateContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preferenceContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
