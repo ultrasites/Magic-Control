@@ -42,7 +42,6 @@ export default function State(props: IState) {
         case "idle":
           return "fa-solid fa-circle-dot";
         case "error":
-        case "warning":
           return "fa-solid fa-triangle-exclamation";
         case "heating":
           return "fa-solid fa-fire";
@@ -66,7 +65,6 @@ export default function State(props: IState) {
         case "slidingUp":
         case "connecting":
         case "idle":
-        case "warning":
         case "heating":
         case "stopped":
           return styles.warning;
