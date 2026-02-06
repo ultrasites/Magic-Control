@@ -1,6 +1,6 @@
-import styles from "./State.module.css";
 import { useContext } from "solid-js";
 import { AppContext } from "./AppProvider";
+import styles from "./State.module.css";
 
 export type StateType =
   | "on"
@@ -12,7 +12,8 @@ export type StateType =
   | "connecting"
   | "idle"
   | "error"
-  | "stopped";
+  | "stopped"
+  | "heating";
 
 export interface IState {
   state: StateType;
@@ -22,32 +23,85 @@ export interface IState {
 export default function State(props: IState) {
   const { translate } = useContext(AppContext);
   const t = translate!;
+
+  const renderBadge = (state: StateType) => {
+    const mapStateToIcon = (state: StateType) => {
+      switch (state) {
+        case "on":
+        case "open":
+          return "fa-solid fa-circle";
+        case "off":
+        case "closed":
+          return "fa-regular fa-circle";
+        case "slidingDown":
+          return "fa-solid fa-arrow-down";
+        case "slidingUp":
+          return "fa-solid fa-arrow-up";
+        case "connecting":
+          return "fa-solid fa-rotate";
+        case "idle":
+          return "fa-solid fa-circle-dot";
+        case "error":
+        case "warning":
+          return "fa-solid fa-triangle-exclamation";
+        case "heating":
+          return "fa-solid fa-fire";
+        case "stopped":
+          return "fa-solid fa-pause";
+        default:
+          return "";
+      }
+    };
+
+    const mapToBadgeColor = (state: StateType) => {
+      switch (state) {
+        case "on":
+        case "open":
+          return styles.success;
+        case "off":
+        case "closed":
+        case "error":
+          return styles.error;
+        case "slidingDown":
+        case "slidingUp":
+        case "connecting":
+        case "idle":
+        case "warning":
+        case "heating":
+        case "stopped":
+          return styles.warning;
+        default:
+          return styles.success;
+      }
+    };
+
+    const mapToAnimation = (state: StateType) => {
+      switch (state) {
+        case "slidingDown":
+        case "slidingUp":
+        case "heating":
+          return styles.blink;
+        case "connecting":
+          return styles.spinner;
+        case "error":
+        default:
+          return "";
+      }
+    };
+    return (
+      <div class={`${styles.badge} ${mapToBadgeColor(state)}`}>
+        <div class={`${styles.animationBox} ${mapToAnimation(state)}`}>
+          <i class={`${styles.icon} ${mapStateToIcon(state)}`}></i>
+        </div>
+        <div class={styles.icon}>{t(state)}</div>
+      </div>
+    );
+  };
+
   return (
     <div class={styles.host}>
-      {(props.state === "connecting" ||
-        props.state === "slidingDown" ||
-        props.state === "slidingUp") && <span class={styles.spinner}></span>}
-      <span
-        classList={{
-          [styles.state]: true,
-          [styles.success]: props.state === "on" || props.state === "open",
-          [styles.warning]:
-            props.state === "slidingDown" ||
-            props.state === "slidingUp" ||
-            props.state === "connecting",
-          [styles.error]:
-            props.state === "error" ||
-            props.state === "off" ||
-            props.state === "closed"
-        }}
-      >
-        {(props.state === "on" ||
-          props.state === "off" ||
-          props.state === "open" ||
-          props.state === "closed") && <i class="fa-solid fa-circle"></i>}
-        {props.state !== "idle" && ` ${t(props.state)}`}
-      </span>
-      {props.value && (
+      {renderBadge(props.state)}
+      {
         <span
           classList={{
             [styles.state]: true,
@@ -56,7 +110,7 @@ export default function State(props: IState) {
         >
           {props.value}
         </span>
-      )}
+      }
     </div>
   );
 }

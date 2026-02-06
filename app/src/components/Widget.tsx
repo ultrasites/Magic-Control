@@ -1,19 +1,20 @@
-import { IconMode } from "./Icon";
-import styles from "./Widget.module.css";
-import State from "./State";
-import { StateType } from "./State";
+import { Subscription, map, pairwise } from "rxjs";
 import { createSignal, useContext } from "solid-js";
 import { AppContext } from "./AppProvider";
+import Button from "./Button";
+import { IconMode } from "./Icon";
+import Slider from "./Slider";
+import State, { StateType } from "./State";
+import styles from "./Widget.module.css";
+import { Device, WidgetConfig, WidgetType } from "./Widget.types";
 import {
-  isInfoWidget,
-  isFritzboxPhone,
   generateTopic,
+  isFritzboxPhone,
+  isInfoWidget,
   isShelly
 } from "./Widget.utils";
-import { Subscription, map, pairwise } from "rxjs";
-import { phoneRing$ } from "./widget/info/fritzbox/PhoneInfo.observables";
 import PhoneHistory from "./widget/info/fritzbox/PhoneHistory";
-import WidgetHeader from "./widget/WidgetHeader";
+import { phoneRing$ } from "./widget/info/fritzbox/PhoneInfo.observables";
 import {
   info$,
   status$,
@@ -30,10 +31,8 @@ import {
   isShutterStatus,
   shellyRestCallAction
 } from "./widget/info/shelly/Shelly.utils";
-import { Device, WidgetConfig, WidgetType } from "./Widget.types";
+import WidgetHeader from "./widget/WidgetHeader";
 import WidgetQuickControls from "./WidgetQuickControls";
-import Button from "./Button";
-import Slider from "./Slider";
 
 export interface IWidget {
   onClick?: () => void;
@@ -266,16 +265,6 @@ export default function Widget(props: IWidget) {
                           : ""
                       }`}
                     />{" "}
-                    {shellyState() && isLightStatus(shellyState()!) && (
-                      <Button
-                        onClick={() => {
-                          setFrontpage(!isFrontpage());
-                          return Promise.resolve();
-                        }}
-                      >
-                        <i class="fa-solid fa-sliders"></i>
-                      </Button>
-                    )}
                   </div>
                 )}
               </div>
@@ -287,6 +276,16 @@ export default function Widget(props: IWidget) {
                   shellyState={shellyState()}
                   state={state().state}
                 />
+                {shellyState() && isLightStatus(shellyState()!) && (
+                  <Button
+                    onClick={() => {
+                      setFrontpage(!isFrontpage());
+                      return Promise.resolve();
+                    }}
+                  >
+                    <i class="fa-solid fa-sliders"></i>
+                  </Button>
+                )}
               </div>
             )}
           </>
