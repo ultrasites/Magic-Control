@@ -44,9 +44,10 @@ export type WidgetType =
   | "SHUTTER"
   | "GARAGE_GATE"
   | "PHONE"
-  | "PLUG";
+  | "PLUG"
+  | "TEMPERATURE";
 export type WidgetControlType = "TOGGLE" | "BUTTON" | "RANGE";
-export type Device = "Shelly" | "TP-Link Tapo" | "Fritzbox";
+export type Device = "Shelly" | "TP-Link Tapo" | "Fritzbox" | "ioBroker";
 
 export type WidgetConfig<
   T extends WidgetType = WidgetType,

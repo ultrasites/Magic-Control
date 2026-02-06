@@ -13,7 +13,8 @@ export const en_dict = {
   connectedSince: "Connected since:",
   hour: "Hour",
   stopped: "stopped",
-  errorGarageGateDown: "Gate not closed!"
+  errorGarageGateDown: "Gate not closed!",
+  heating: "heating"
 };
 
 type Dict = typeof en_dict;
@@ -33,5 +34,6 @@ export const de_dict: Dict = {
   connectedSince: "Verbunden seit:",
   hour: "Uhr",
   stopped: "gestoppt",
-  errorGarageGateDown: "Tor nicht geschlossen!"
+  errorGarageGateDown: "Tor nicht geschlossen!",
+  heating: "heizt"
 };
