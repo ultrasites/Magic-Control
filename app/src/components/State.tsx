@@ -91,7 +91,7 @@ export default function State(props: IState) {
         <div class={`${styles.animationBox} ${mapToAnimation(state)}`}>
           <i class={`${styles.icon} ${mapStateToIcon(state)}`}></i>
         </div>
-        <div class={styles.icon}>{t(state)}</div>
+        <div class={styles.icon}>{state !== "idle" && t(state)}</div>
       </div>
     );
   };
