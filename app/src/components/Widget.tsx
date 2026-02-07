@@ -4,7 +4,7 @@ import { AppContext } from "./AppProvider";
 import Button from "./Button";
 import { IconMode } from "./Icon";
 import Slider from "./Slider";
-import State, { StateType } from "./State";
+import State, { IState } from "./State";
 import styles from "./Widget.module.css";
 import { Device, WidgetConfig, WidgetType } from "./Widget.types";
 import {
@@ -52,10 +52,7 @@ export default function Widget(props: IWidget) {
   const id = `${props.config.name}-${props.config.type}-${props.config.device}-${props.config.mqtt.id}`;
 
   const [connected, setConnected] = createSignal<IconMode>("warning");
-  const [state, setState] = createSignal<{
-    state: StateType;
-    value?: string;
-  }>({
+  const [state, setState] = createSignal<IState>({
     state: "connecting"
   });
   const [_phoneNumber, setPhoneNumber] = createSignal<string>("");
@@ -96,9 +93,7 @@ export default function Widget(props: IWidget) {
       .pipe(pairwise())
       .subscribe({
         next: ([prevStatus, status]) => {
-          console.log("hier");
           if (isGarageGateStatus(status) && isGarageGateStatus(prevStatus)) {
-            console.log(status);
             if (!prevStatus.state && status.state) {
               setState({
                 state: "slidingUp"
@@ -264,7 +259,7 @@ export default function Widget(props: IWidget) {
                           ? "%"
                           : ""
                       }`}
-                    />{" "}
+                    />
                   </div>
                 )}
               </div>

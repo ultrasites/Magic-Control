@@ -1,5 +1,5 @@
 import * as mqtt from "mqtt/dist/mqtt.min";
-import { Subject, distinctUntilChanged, filter, map, tap } from "rxjs";
+import { Subject, distinctUntilChanged, filter, map } from "rxjs";
 
 export interface MqttMessage {
   topic: string;
@@ -44,7 +44,7 @@ export class MQTT {
     return this.messages$.pipe(
       filter(({ topic, message }) => topic === oTopic && message !== "NaN"),
       distinctUntilChanged((prev, cur) => prev.message === cur.message),
-      tap(console.log),
+      // tap(console.log),
       map(({ message }) => (message ? JSON.parse(message) : message) as T)
     );
   }

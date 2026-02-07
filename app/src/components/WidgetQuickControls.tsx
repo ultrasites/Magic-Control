@@ -1,20 +1,20 @@
-import { isShelly } from "./Widget.utils";
-import ToggleButton from "./ToggleButton";
 import Button from "./Button";
+import { StateType } from "./State";
+import ToggleButton from "./ToggleButton";
+import { Device, WidgetConfig, WidgetType } from "./Widget.types";
+import { isShelly } from "./Widget.utils";
+import { triggerCloseGarageGate$ } from "./widget/info/shelly/Shelly.observables";
 import {
   LightStatus,
   ShutterStatus,
   StatusTypes
 } from "./widget/info/shelly/Shelly.types";
 import {
-  shellyRestCallAction,
   isDimmedLight,
+  isGarageGate,
   isShutter,
-  isGarageGate
+  shellyRestCallAction
 } from "./widget/info/shelly/Shelly.utils";
-import { Device, WidgetConfig, WidgetType } from "./Widget.types";
-import { StateType } from "./State";
-import { triggerCloseGarageGate$ } from "./widget/info/shelly/Shelly.observables";
 
 export interface IWidgetQuickControls {
   shellyState?: StatusTypes;
@@ -28,7 +28,6 @@ export default function WidgetQuickControls(props: IWidgetQuickControls) {
     config: WidgetConfig<WidgetType, Device>,
     state: StateType
   ) => {
-    console.log(state);
     switch (config.type) {
       case "PLUG":
         return <ToggleButton onClick={async (_isActive) => {}} />;
