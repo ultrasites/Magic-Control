@@ -1,4 +1,4 @@
-import * as mqtt from "mqtt/dist/mqtt.min";
+import mqtt from "mqtt";
 import { Subject, distinctUntilChanged, filter, map } from "rxjs";
 
 export interface MqttMessage {
