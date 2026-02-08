@@ -32,7 +32,7 @@ import {
   isShutterStatus,
   shellyRestCallAction
 } from "./widget/info/shelly/Shelly.utils";
-import { status$ } from "./widget/info/tuya/tuya.observables";
+import { status$ } from "./widget/info/tuya/Tuya.observables";
 import WidgetHeader from "./widget/WidgetHeader";
 import WidgetQuickControls from "./WidgetQuickControls";
 
