@@ -188,8 +188,8 @@ export default function Widget(props: IWidget) {
           setCurrentTemperature(parseFloat(state.currentTemperature));
           setState({
             state: parseInt(state.workState) === 1 ? "heating" : "stopped",
-            value: `soll ${state.setTemperature} °C | ${
-              parseInt(state.mode) === 1 ? "aut" : "temp"
+            value: ` ${state.setTemperature} °C | ${
+              parseInt(state.mode) === 1 ? "A" : "M"
             }`
           });
         }
