@@ -2,7 +2,7 @@ import { createSignal, JSX } from "solid-js";
 import styles from "./Button.module.css";
 
 export interface IButton {
-  onClick: () => Promise<void>;
+  onClick: () => Promise<void | [void, void]>;
   active?: boolean;
   disabled?: boolean;
   children: JSX.Element;
@@ -18,7 +18,7 @@ export default function Button(props: IButton) {
       classList={{
         [styles.button]: true,
         [styles.active]: props.active || touched(),
-        [styles.disabled]: disabled(),
+        [styles.disabled]: disabled()
       }}
       onTouchStart={() => {
         if (!disabled()) {

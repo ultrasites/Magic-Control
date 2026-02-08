@@ -11,13 +11,14 @@ import {
   generateTopic,
   isFritzboxPhone,
   isInfoWidget,
-  isShelly
+  isShelly,
+  isTuya
 } from "./Widget.utils";
 import PhoneHistory from "./widget/info/fritzbox/PhoneHistory";
 import { phoneRing$ } from "./widget/info/fritzbox/PhoneInfo.observables";
 import {
   info$,
-  status$,
+  shellyStatus$,
   triggerCloseGarageGate$
 } from "./widget/info/shelly/Shelly.observables";
 import {
@@ -31,6 +32,7 @@ import {
   isShutterStatus,
   shellyRestCallAction
 } from "./widget/info/shelly/Shelly.utils";
+import { status$ } from "./widget/info/tuya/tuya.observables";
 import WidgetHeader from "./widget/WidgetHeader";
 import WidgetQuickControls from "./WidgetQuickControls";
 
@@ -62,6 +64,8 @@ export default function Widget(props: IWidget) {
   const [_shellyInfo, setShellyInfo] = createSignal<ShellyInfo | undefined>(
     undefined
   );
+
+  const [currentTemperature, setCurrentTemperature] = createSignal<number>(0);
   const [isFrontpage, setFrontpage] = createSignal<boolean>(true);
 
   const connected$ = mqtt!
@@ -89,7 +93,7 @@ export default function Widget(props: IWidget) {
   subscription.add(connected$.subscribe());
 
   if (isShelly(config)) {
-    const garageGateStatus$ = status$<typeof config.type>(mqtt!, config)
+    const garageGateStatus$ = shellyStatus$<typeof config.type>(mqtt!, config)
       .pipe(pairwise())
       .subscribe({
         next: ([prevStatus, status]) => {
@@ -115,7 +119,10 @@ export default function Widget(props: IWidget) {
         }
       });
 
-    const simpleStatus$ = status$<typeof config.type>(mqtt!, config).subscribe({
+    const simpleShellyStatus$ = shellyStatus$<typeof config.type>(
+      mqtt!,
+      config
+    ).subscribe({
       next: (status) => {
         if (isLightStatus(status)) {
           setState({
@@ -141,7 +148,7 @@ export default function Widget(props: IWidget) {
     });
 
     subscription.add(
-      config.type === "GARAGE_GATE" ? garageGateStatus$ : simpleStatus$
+      config.type === "GARAGE_GATE" ? garageGateStatus$ : simpleShellyStatus$
     );
 
     if (config.type === "GARAGE_GATE") {
@@ -169,6 +176,22 @@ export default function Widget(props: IWidget) {
       info$<typeof config.type>(mqtt!, config).subscribe({
         next: (info) => {
           setShellyInfo(info as ShellyInfo);
+        }
+      })
+    );
+  }
+
+  if (isTuya(config)) {
+    subscription.add(
+      status$<typeof config.type>(mqtt!, config).subscribe({
+        next: (state) => {
+          setCurrentTemperature(parseFloat(state.currentTemperature));
+          setState({
+            state: parseInt(state.workState) === 1 ? "heating" : "stopped",
+            value: `soll ${state.setTemperature} °C | ${
+              parseInt(state.mode) === 1 ? "aut" : "temp"
+            }`
+          });
         }
       })
     );
@@ -248,6 +271,12 @@ export default function Widget(props: IWidget) {
               />
               <div>
                 {isFritzboxPhone(config) && <PhoneHistory config={config} />}
+
+                {config.type === "TEMPERATURE" && (
+                  <div class={styles.temperature}>
+                    {currentTemperature()} °C
+                  </div>
+                )}
                 {!isInfo && (
                   <div class={styles.stateContent}>
                     <State
@@ -264,12 +293,13 @@ export default function Widget(props: IWidget) {
                 )}
               </div>
             </div>
-            {!isInfo && shellyState() && (
+            {!isInfo && (shellyState() || config.type === "TEMPERATURE") && (
               <div class={styles.quickIncludes}>
                 <WidgetQuickControls
                   config={config}
                   shellyState={shellyState()}
-                  state={state().state}
+                  state={state()}
+                  mqtt={mqtt!}
                 />
                 {shellyState() && isLightStatus(shellyState()!) && (
                   <Button

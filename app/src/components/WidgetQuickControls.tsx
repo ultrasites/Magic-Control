@@ -1,8 +1,9 @@
+import { MQTT } from "../services/mqtt";
 import Button from "./Button";
-import { StateType } from "./State";
+import { IState } from "./State";
 import ToggleButton from "./ToggleButton";
 import { Device, WidgetConfig, WidgetType } from "./Widget.types";
-import { isShelly } from "./Widget.utils";
+import { generateTopic, isShelly, isTuya } from "./Widget.utils";
 import { triggerCloseGarageGate$ } from "./widget/info/shelly/Shelly.observables";
 import {
   LightStatus,
@@ -19,18 +20,88 @@ import {
 export interface IWidgetQuickControls {
   shellyState?: StatusTypes;
   config: WidgetConfig<WidgetType, Device>;
-  state: StateType;
+  state: IState;
+  mqtt: MQTT;
 }
 
 export default function WidgetQuickControls(props: IWidgetQuickControls) {
   const renderQuickIncludes = (
     shellyState: StatusTypes | undefined,
     config: WidgetConfig<WidgetType, Device>,
-    state: StateType
+    state: IState,
+    mqtt: MQTT
   ) => {
     switch (config.type) {
       case "PLUG":
         return <ToggleButton onClick={async (_isActive) => {}} />;
+      case "TEMPERATURE":
+        return (
+          <>
+            <Button
+              onClick={async () => {
+                if (isTuya(config)) {
+                  const setTemperatureTopic = generateTopic(
+                    config.mqtt.id,
+                    config.mqtt.topics.setTemperature,
+                    config
+                  );
+                  const setModeTopic = generateTopic(
+                    config.mqtt.id,
+                    config.mqtt.topics.setMode,
+                    config
+                  );
+                  const value = parseFloat(state.value!);
+
+                  if (value < 25) {
+                    return await Promise.all([
+                      mqtt.publish(
+                        setTemperatureTopic,
+                        (value + 0.5).toString()
+                      ),
+                      mqtt.publish(setModeTopic, "2")
+                    ]);
+                  }
+                  return Promise.resolve();
+                }
+
+                return Promise.reject("Device type not supported.");
+              }}
+            >
+              <i class={`fa-plus fa-solid`} />
+            </Button>
+            <Button
+              onClick={async () => {
+                if (isTuya(config)) {
+                  const setTemperatureTopic = generateTopic(
+                    config.mqtt.id,
+                    config.mqtt.topics.setTemperature,
+                    config
+                  );
+                  const setModeTopic = generateTopic(
+                    config.mqtt.id,
+                    config.mqtt.topics.setMode,
+                    config
+                  );
+                  const value = parseFloat(state.value!);
+
+                  if (value > 0) {
+                    return await Promise.all([
+                      mqtt.publish(
+                        setTemperatureTopic,
+                        (value - 0.5).toString()
+                      ),
+                      mqtt.publish(setModeTopic, "2")
+                    ]);
+                  }
+                  return Promise.resolve();
+                }
+                return Promise.reject("Device type not supported.");
+              }}
+            >
+              <i class={`fa-minus fa-solid`} />
+            </Button>
+          </>
+        );
       case "SHUTTER":
         return (
           <>
@@ -116,7 +187,9 @@ export default function WidgetQuickControls(props: IWidgetQuickControls) {
         return (
           <>
             <Button
-              disabled={state === "slidingDown" || state === "slidingUp"}
+              disabled={
+                state.state === "slidingDown" || state.state === "slidingUp"
+              }
               onClick={async () => {
                 if (isShelly(config) && isGarageGate(config)) {
                   await shellyRestCallAction(
@@ -126,7 +199,7 @@ export default function WidgetQuickControls(props: IWidgetQuickControls) {
                       turn: "toggle"
                     }
                   );
-                  if (state === "open") {
+                  if (state.state === "open") {
                     triggerCloseGarageGate$.next(null);
                   }
                   return Promise.resolve();
@@ -137,9 +210,9 @@ export default function WidgetQuickControls(props: IWidgetQuickControls) {
             >
               <i
                 class={`${
-                  state === "closed"
+                  state.state === "closed"
                     ? "fa-chevron-up"
-                    : state === "open"
+                    : state.state === "open"
                       ? "fa-chevron-down"
                       : "fa-hourglass-start"
                 } fa-solid`}
@@ -151,6 +224,13 @@ export default function WidgetQuickControls(props: IWidgetQuickControls) {
   };
 
   return (
-    <>{renderQuickIncludes(props.shellyState, props.config, props.state)}</>
+    <>
+      {renderQuickIncludes(
+        props.shellyState,
+        props.config,
+        props.state,
+        props.mqtt
+      )}
+    </>
   );
 }

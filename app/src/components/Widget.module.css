@@ -36,6 +36,10 @@
   gap: 5px;
 }
 
+.temperature {
+  font-size: 32px;
+}
+
 .content {
   display: flex;
   flex-direction: column;

@@ -14,12 +14,7 @@ export class MQTT {
   messages$ = this.messages.asObservable();
 
   constructor() {
-    this.client = mqtt.connect({
-      hostname: "192.168.178.158",
-      port: 1884,
-      protocol: "ws",
-      clientId: "mmio"
-    });
+    this.client = mqtt.connect("mqtt://192.168.178.158:1884");
 
     this.client.on("connect", (err) => {
       console.error(err);
@@ -47,5 +42,14 @@ export class MQTT {
       // tap(console.log),
       map(({ message }) => (message ? JSON.parse(message) : message) as T)
     );
+  }
+
+  async publish(topic: string, message: string) {
+    this.client.publish(topic, message, (err) => {
+      if (err) {
+        return Promise.reject(err);
+      }
+      return Promise.resolve();
+    });
   }
 }

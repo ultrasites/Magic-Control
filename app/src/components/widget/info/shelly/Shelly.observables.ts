@@ -4,7 +4,7 @@ import { WidgetConfig, WidgetType } from "../../../Widget.types";
 import { generateTopic } from "../../../Widget.utils";
 import { GarageGateStatus, LightStatus, ShutterStatus } from "./Shelly.types";
 
-export const status$ = <T extends WidgetType>(
+export const shellyStatus$ = <T extends WidgetType>(
   mqtt: MQTT,
   config: WidgetConfig<T, "Shelly">
 ) =>

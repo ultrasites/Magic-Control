@@ -11,6 +11,12 @@ export const isShelly = (
   (config as WidgetConfig<WidgetType, "Shelly">).mqtt.topics.status !==
   undefined;
 
+export const isTuya = (
+  config: WidgetConfig<WidgetType, Device>
+): config is WidgetConfig<WidgetType, "Tuya Smart"> =>
+  (config as WidgetConfig<WidgetType, "Tuya Smart">).mqtt.topics
+    .setTemperature !== undefined;
+
 export const isInfoWidget = (type: WidgetType) => type === "PHONE";
 
 export const generateTopic = (

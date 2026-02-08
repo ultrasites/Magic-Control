@@ -16,9 +16,15 @@ export interface WidgetMqttConfig<T extends Device> {
             history: string;
             phonebook: string;
           }
-        : T extends "TP-Link Tapo"
-          ? { setPower: string }
-          : { status: string; info: string });
+        : T extends "Tuya Smart"
+          ? {
+              setTemperature: string;
+              state: string;
+              setMode: string;
+            }
+          : T extends "TP-Link Tapo"
+            ? { setPower: string }
+            : { status: string; info: string });
   };
 }
 
@@ -47,7 +53,7 @@ export type WidgetType =
   | "PLUG"
   | "TEMPERATURE";
 export type WidgetControlType = "TOGGLE" | "BUTTON" | "RANGE";
-export type Device = "Shelly" | "TP-Link Tapo" | "Fritzbox" | "ioBroker";
+export type Device = "Shelly" | "TP-Link Tapo" | "Fritzbox" | "Tuya Smart";
 
 export type WidgetConfig<
   T extends WidgetType = WidgetType,

@@ -81,7 +81,6 @@ export default function State(props: IState) {
           return styles.blink;
         case "connecting":
           return styles.spinner;
-        case "error":
         default:
           return "";
       }
